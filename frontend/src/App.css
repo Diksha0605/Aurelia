@@ -677,3 +677,12 @@ button {
     animation-duration: 0.01ms !important;
   }
 }
+
+.hero-content h1 {
+  color: #243b32;
+}
+
+.hero-content h1 span {
+  color: #b17d52;
+  font-style: italic;
+}
