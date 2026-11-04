@@ -6,13 +6,31 @@ function App() {
   const [stays, setStays] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-
+  const [destination, setDestination] = useState('')
+  const [searchDestination, setSearchDestination] = useState('')
+  const [guests, setGuests] = useState(2)
+  const [searchGuests, setSearchGuests] = useState(2)
+  const [maxPrice, setMaxPrice] = useState(5000)
+  const [searchMaxPrice, setSearchMaxPrice] = useState(5000)
+  
   useEffect(() => {
     async function fetchStays() {
       try {
-        const response = await fetch(
-          'http://localhost:5000/api/properties'
-        )
+        setLoading(true)
+        setError('')
+
+       const params = new URLSearchParams()
+       
+       if (searchDestination.trim()) {
+        params.set('destination', searchDestination.trim())
+       }
+       
+       params.set('guests', String(searchGuests))
+       params.set('maxPrice', String(searchMaxPrice))
+       
+       const url = `http://localhost:5000/api/properties?${params.toString()}`
+
+        const response = await fetch(url)
 
         if (!response.ok) {
           throw new Error('Failed to load stays')
@@ -20,16 +38,16 @@ function App() {
 
         const result = await response.json()
         setStays(result.data || [])
-      } catch (err) {
-        console.error(err)
-        setError('Unable to load stays. Please check the backend.')
-      } finally {
-        setLoading(false)
+        } catch (err) {
+          console.error(err)
+          setError('Unable to load stays. Please check the backend.')
+        } finally {
+          setLoading(false)
+        }
       }
-    }
+      fetchStays()
+    }, [searchDestination, searchGuests, searchMaxPrice])
 
-    fetchStays()
-  }, [])
 
   return (
     <div className="app">
@@ -73,8 +91,10 @@ function App() {
             <div className="search-field">
               <span>WHERE</span>
               <input
-                type="text"
-                placeholder="Explore destinations"
+              type="text"
+              placeholder="Explore destinations"
+              value={destination}
+              onChange={(event) => setDestination(event.target.value)}
               />
             </div>
 
@@ -86,16 +106,44 @@ function App() {
             <div className="search-field">
               <span>GUESTS</span>
               <input
-                type="number"
-                min="1"
-                defaultValue="2"
-                aria-label="Number of guests"
-              />
+              type="number"
+              min="1"
+              value={guests}
+              onChange={(event) => {
+                setGuests(Math.max(1, Number(event.target.value) || 1))
+              }}
+              aria-label="Number of guests"
+            />
             </div>
+            
+            <div className="search-field">
+              <span>MAX PRICE / NIGHT (₹)</span>
+              <input
+              type="number"
+              min="1"
+              value={maxPrice}
+              onChange={(event) => {
+                setMaxPrice(Math.max(1, Number(event.target.value) || 1))
+              }}
+              aria-label="Maximum price per night in rupees"
+             />
+           </div>
+            
+            <button
+            type="button"
+            className="search-button"
+            onClick={() => {
+              setSearchDestination(destination)
+              setSearchGuests(guests)
+              setSearchMaxPrice(maxPrice)
+              document.getElementById('stays')?.scrollIntoView({
+                behavior: 'smooth',
+              })
+            }}
+          >
+            ↗
+            </button>
 
-            <a href="#stays" className="search-button">
-              ↗
-            </a>
           </div>
 
           <p className="hero-note">

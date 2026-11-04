@@ -27,9 +27,60 @@ app.get("/api/health", (req, res) => {
 });
 
 // Get all properties
+
+
 app.get("/api/properties", async (req, res) => {
   try {
-    const properties = await Property.find().sort({
+    const { destination, guests, maxPrice } = req.query;
+    const filter = {};
+
+    // 1. Filter by destination
+    if (destination && destination.trim()) {
+      filter.$or = [
+        {
+          title: {
+            $regex: destination.trim(),
+            $options: "i",
+          },
+        },
+        {
+          location: {
+            $regex: destination.trim(),
+            $options: "i",
+          },
+        },
+      ];
+    }
+
+    // 2. Filter by guest capacity
+    if (guests !== undefined) {
+      const guestCount = Number(guests);
+
+      if (!Number.isInteger(guestCount) || guestCount < 1) {
+        return res.status(400).json({
+          success: false,
+          message: "Guests must be a positive integer",
+        });
+      }
+
+      filter.guests = { $gte: guestCount };
+    }
+
+    // 3. Filter by maximum price per night
+    if (maxPrice !== undefined) {
+      const priceLimit = Number(maxPrice);
+
+      if (!Number.isFinite(priceLimit) || priceLimit < 1) {
+        return res.status(400).json({
+          success: false,
+          message: "Maximum price must be a positive number",
+        });
+      }
+
+      filter.pricePerNight = { $lte: priceLimit };
+    }
+
+    const properties = await Property.find(filter).sort({
       createdAt: -1,
     });
 
