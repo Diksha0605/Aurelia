@@ -6,6 +6,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const Property = require("./models/Property");
+const Booking = require("./models/Booking");
 require("dotenv").config();
 
 const app = express();
@@ -28,73 +29,188 @@ app.get("/api/health", (req, res) => {
 
 // Get all properties
 
-
-app.get("/api/properties", async (req, res) => {
+app.get("/api/bookings/availability", async (req, res) => {
   try {
-    const { destination, guests, maxPrice } = req.query;
-    const filter = {};
+    const { propertyId, checkIn, checkOut } = req.query;
 
-    // 1. Filter by destination
-    if (destination && destination.trim()) {
-      filter.$or = [
-        {
-          title: {
-            $regex: destination.trim(),
-            $options: "i",
-          },
-        },
-        {
-          location: {
-            $regex: destination.trim(),
-            $options: "i",
-          },
-        },
-      ];
+    if (!propertyId || !checkIn || !checkOut) {
+      return res.status(400).json({
+        success: false,
+        message: "Property ID, check-in and check-out dates are required",
+      });
     }
 
-    // 2. Filter by guest capacity
-    if (guests !== undefined) {
-      const guestCount = Number(guests);
-
-      if (!Number.isInteger(guestCount) || guestCount < 1) {
-        return res.status(400).json({
-          success: false,
-          message: "Guests must be a positive integer",
-        });
-      }
-
-      filter.guests = { $gte: guestCount };
+    if (!mongoose.Types.ObjectId.isValid(propertyId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid property ID",
+      });
     }
 
-    // 3. Filter by maximum price per night
-    if (maxPrice !== undefined) {
-      const priceLimit = Number(maxPrice);
+    const startDate = new Date(checkIn);
+    const endDate = new Date(checkOut);
 
-      if (!Number.isFinite(priceLimit) || priceLimit < 1) {
-        return res.status(400).json({
-          success: false,
-          message: "Maximum price must be a positive number",
-        });
-      }
-
-      filter.pricePerNight = { $lte: priceLimit };
+    if (
+      Number.isNaN(startDate.getTime()) ||
+      Number.isNaN(endDate.getTime()) ||
+      startDate >= endDate
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide valid check-in and check-out dates",
+      });
     }
 
-    const properties = await Property.find(filter).sort({
-      createdAt: -1,
+    const property = await Property.findById(propertyId);
+
+    if (!property) {
+      return res.status(404).json({
+        success: false,
+        message: "Property not found",
+      });
+    }
+
+    const existingBooking = await Booking.findOne({
+      property: propertyId,
+      status: "confirmed",
+      checkIn: { $lt: endDate },
+      checkOut: { $gt: startDate },
     });
 
     res.status(200).json({
       success: true,
-      count: properties.length,
-      data: properties,
+      available: !existingBooking,
+      message: existingBooking
+        ? "This property is already booked for the selected dates"
+        : "This property is available!",
     });
   } catch (error) {
-    console.error("Error fetching properties:", error.message);
+    console.error("Availability check error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to check property availability",
+    });
+  }
+});
+
+
+// Create a new booking
+app.post("/api/bookings", async (req, res) => {
+  try {
+    const {
+      propertyId,
+      guestName,
+      guestEmail,
+      checkIn,
+      checkOut,
+      guests,
+    } = req.body;
+
+    // Validate required fields
+    if (
+      !propertyId ||
+      !guestName ||
+      !guestEmail ||
+      !checkIn ||
+      !checkOut ||
+      guests === undefined
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide all booking details",
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(propertyId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid property ID",
+      });
+    }
+
+    const startDate = new Date(checkIn);
+    const endDate = new Date(checkOut);
+    const guestCount = Number(guests);
+
+    if (
+      Number.isNaN(startDate.getTime()) ||
+      Number.isNaN(endDate.getTime()) ||
+      startDate >= endDate
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid check-in or check-out dates",
+      });
+    }
+
+    if (!Number.isInteger(guestCount) || guestCount < 1) {
+      return res.status(400).json({
+        success: false,
+        message: "Guest count must be at least 1",
+      });
+    }
+
+    const property = await Property.findById(propertyId);
+
+    if (!property) {
+      return res.status(404).json({
+        success: false,
+        message: "Property not found",
+      });
+    }
+
+    if (guestCount > property.guests) {
+      return res.status(400).json({
+        success: false,
+        message: "Guest count exceeds property capacity",
+      });
+    }
+
+    // Check for overlapping bookings
+    const existingBooking = await Booking.findOne({
+      property: propertyId,
+      status: "confirmed",
+      checkIn: { $lt: endDate },
+      checkOut: { $gt: startDate },
+    });
+
+    if (existingBooking) {
+      return res.status(409).json({
+        success: false,
+        message: "Property is already booked for these dates",
+      });
+    }
+
+    // Calculate total price
+    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+    const nights = Math.round(
+      (endDate - startDate) / millisecondsPerDay
+    );
+
+    const totalPrice = nights * property.pricePerNight;
+
+    // Save booking in MongoDB
+    const booking = await Booking.create({
+      property: propertyId,
+      guestName,
+      guestEmail,
+      checkIn: startDate,
+      checkOut: endDate,
+      guests: guestCount,
+      totalPrice,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Booking created successfully!",
+      data: booking,
+    });
+  } catch (error) {
+    console.error("Booking creation error:", error.message);
 
     res.status(500).json({
       success: false,
-      message: "Failed to fetch properties",
+      message: "Failed to create booking",
     });
   }
 });
