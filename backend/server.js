@@ -94,6 +94,69 @@ app.get("/api/bookings/availability", async (req, res) => {
 });
 
 
+
+app.get("/api/properties", async (req, res) => {
+  try {
+    const { destination, guests, maxPrice } = req.query;
+    const filter = {};
+
+    // Search by property title or location
+    if (destination && destination.trim()) {
+      filter.$or = [
+        { title: { $regex: destination.trim(), $options: "i" } },
+        { location: { $regex: destination.trim(), $options: "i" } },
+      ];
+    }
+
+    // Filter by guest capacity
+    if (guests !== undefined) {
+      const guestCount = Number(guests);
+
+      if (!Number.isInteger(guestCount) || guestCount < 1) {
+        return res.status(400).json({
+          success: false,
+          message: "Guests must be a positive integer",
+        });
+      }
+
+      filter.guests = { $gte: guestCount };
+    }
+
+    // Filter by maximum price
+    if (maxPrice !== undefined) {
+      const priceLimit = Number(maxPrice);
+
+      if (!Number.isFinite(priceLimit) || priceLimit < 1) {
+        return res.status(400).json({
+          success: false,
+          message: "Maximum price must be a positive number",
+        });
+      }
+
+      filter.pricePerNight = { $lte: priceLimit };
+    }
+
+    const properties = await Property.find(filter).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({
+      success: true,
+      count: properties.length,
+      data: properties,
+    });
+
+  } catch (error) {
+    console.error("Error fetching properties:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch properties",
+    });
+  }
+});
+
+
 // Create a new booking
 app.post("/api/bookings", async (req, res) => {
   try {

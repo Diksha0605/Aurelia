@@ -12,6 +12,63 @@ function App() {
   const [searchGuests, setSearchGuests] = useState(2)
   const [maxPrice, setMaxPrice] = useState(5000)
   const [searchMaxPrice, setSearchMaxPrice] = useState(5000)
+
+  // Booking states
+  const [selectedStay, setSelectedStay] = useState(null)
+  const [bookingForm, setBookingForm] = useState({
+    guestName: '',
+    guestEmail: '',
+    checkIn: '',
+    checkOut: '',
+    guests: 1,
+  })
+
+const [bookingLoading, setBookingLoading] = useState(false)
+const [bookingMessage, setBookingMessage] = useState('')
+const [bookingError, setBookingError] = useState('')
+
+  // Check property availability
+// Create a new booking
+async function handleCreateBooking(event) {
+  event.preventDefault()
+
+  try {
+    setBookingLoading(true)
+    setBookingError('')
+    setBookingMessage('')
+
+    const response = await fetch('http://localhost:5000/api/bookings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        propertyId: selectedStay._id,
+        guestName: bookingForm.guestName,
+        guestEmail: bookingForm.guestEmail,
+        checkIn: bookingForm.checkIn,
+        checkOut: bookingForm.checkOut,
+        guests: Number(bookingForm.guests),
+      }),
+    })
+
+    const result = await response.json()
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Booking failed')
+    }
+
+    setBookingMessage(
+      `Booking confirmed! Total price: ₹${result.data.totalPrice}`
+    )
+
+  } catch (err) {
+    console.error('Booking error:', err)
+    setBookingError(err.message || 'Unable to complete booking.')
+  } finally {
+    setBookingLoading(false)
+  }
+}
   
   useEffect(() => {
     async function fetchStays() {
@@ -240,12 +297,159 @@ function App() {
                     </strong>
                     <span> / night</span>
                   </div>
+
+                  <button
+                  className="book-now-btn"
+                  onClick={() => {
+                    setSelectedStay(stay)
+                    setBookingForm({
+                      guestName: '',
+                      guestEmail: '',
+                      checkIn: '',
+                      checkOut: '',
+                      guests: 1,
+                    })
+                    setBookingMessage('')
+                    setBookingError('')
+                  }}
+                  >
+                  Book Now
+                </button>
+
                 </div>
               </article>
             ))}
           </div>
         )}
       </section>
+
+            {/* Booking Modal */}
+      {selectedStay && (
+        <div className="booking-overlay">
+          <div className="booking-modal">
+            <button
+              type="button"
+              className="booking-close"
+              onClick={() => setSelectedStay(null)}
+            >
+              ×
+            </button>
+
+            <span className="eyebrow">COMPLETE YOUR STAY</span>
+
+            <h2>Book your escape.</h2>
+
+            <div className="booking-property">
+              <h3>{selectedStay.title}</h3>
+              <p>{selectedStay.location}</p>
+              <strong>
+                ₹{Number(selectedStay.pricePerNight).toLocaleString('en-IN')}
+              </strong>
+              <span> / night</span>
+            </div>
+
+            <form onSubmit={handleCreateBooking}>
+              <label>Full Name</label>
+              <input
+                type="text"
+                placeholder="Enter your name"
+                value={bookingForm.guestName}
+                onChange={(event) =>
+                  setBookingForm({
+                    ...bookingForm,
+                    guestName: event.target.value,
+                  })
+                }
+                required
+              />
+
+              <label>Email Address</label>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={bookingForm.guestEmail}
+                onChange={(event) =>
+                  setBookingForm({
+                    ...bookingForm,
+                    guestEmail: event.target.value,
+                  })
+                }
+                required
+              />
+
+              <div className="booking-date-row">
+                <div>
+                  <label>Check-in</label>
+                  <input
+                    type="date"
+                    value={bookingForm.checkIn}
+                    min={new Date().toISOString().split('T')[0]}
+                    onChange={(event) =>
+                      setBookingForm({
+                        ...bookingForm,
+                        checkIn: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label>Check-out</label>
+                  <input
+                    type="date"
+                    value={bookingForm.checkOut}
+                    min={bookingForm.checkIn || new Date().toISOString().split('T')[0]}
+                    onChange={(event) =>
+                      setBookingForm({
+                        ...bookingForm,
+                        checkOut: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+              </div>
+
+              <label>Number of Guests</label>
+              <input
+                type="number"
+                min="1"
+                max={selectedStay.guests}
+                value={bookingForm.guests}
+                onChange={(event) =>
+                  setBookingForm({
+                    ...bookingForm,
+                    guests: Number(event.target.value),
+                  })
+                }
+                required
+              />
+
+              <button
+              type="submit"
+              className="booking-submit"
+              disabled={bookingLoading}
+              >
+                {bookingLoading ? 'Confirming...' : 'Confirm Booking'}
+              </button>
+              
+              {bookingMessage && (
+                <p style={{ color: 'green', marginTop: '12px' }}>
+                  {bookingMessage}
+                </p>
+              )}
+              
+              {bookingError && (
+                <p style={{ color: 'red', marginTop: '12px' }}>
+                  {bookingError}
+                </p>
+              )}
+            </form>
+          </div>
+        </div>
+      )}
+
 
       {/* Budget Banner */}
       <section className="budget-banner" id="budget">
