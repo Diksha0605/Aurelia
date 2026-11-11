@@ -12,6 +12,9 @@ function App() {
   const [searchGuests, setSearchGuests] = useState(2)
   const [maxPrice, setMaxPrice] = useState(5000)
   const [searchMaxPrice, setSearchMaxPrice] = useState(5000)
+  const [myTrips, setMyTrips] = useState([])
+  const [tripsLoading, setTripsLoading] = useState(false)
+  const [tripsError, setTripsError] = useState('')
 
   // Booking states
   const [selectedStay, setSelectedStay] = useState(null)
@@ -22,10 +25,10 @@ function App() {
     checkOut: '',
     guests: 1,
   })
-
-const [bookingLoading, setBookingLoading] = useState(false)
-const [bookingMessage, setBookingMessage] = useState('')
-const [bookingError, setBookingError] = useState('')
+  
+  const [bookingLoading, setBookingLoading] = useState(false)
+  const [bookingMessage, setBookingMessage] = useState('')
+  const [bookingError, setBookingError] = useState('')
 
   // Check property availability
 // Create a new booking
@@ -62,6 +65,8 @@ async function handleCreateBooking(event) {
       `Booking confirmed! Total price: ₹${result.data.totalPrice}`
     )
 
+    await fetchMyTrips()
+
   } catch (err) {
     console.error('Booking error:', err)
     setBookingError(err.message || 'Unable to complete booking.')
@@ -69,6 +74,33 @@ async function handleCreateBooking(event) {
     setBookingLoading(false)
   }
 }
+
+// Fetch bookings for My Trips
+async function fetchMyTrips() {
+  try {
+    setTripsLoading(true)
+    setTripsError('')
+
+    const response = await fetch('http://localhost:5000/api/bookings')
+    const result = await response.json()
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Failed to fetch trips')
+    }
+
+    setMyTrips(result.data)
+
+  } catch (error) {
+    console.error('My Trips error:', error)
+    setTripsError(error.message || 'Unable to load trips')
+  } finally {
+    setTripsLoading(false)
+  }
+}
+
+useEffect(() => {
+  fetchMyTrips()
+}, [])
   
   useEffect(() => {
     async function fetchStays() {
@@ -117,6 +149,7 @@ async function handleCreateBooking(event) {
 
         <nav className="nav-links">
           <a href="#stays">Explore stays</a>
+          <a href="#my-trips">My Trips</a>
           <a href="#budget">Budget planner</a>
         </nav>
 
@@ -323,6 +356,86 @@ async function handleCreateBooking(event) {
         )}
       </section>
 
+            {/* My Trips Section */}
+      <section className="my-trips-section" id="my-trips">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">YOUR TRAVEL JOURNEY</span>
+            <h2>My Trips.</h2>
+          </div>
+
+          <p>All your bookings in one place.</p>
+        </div>
+
+        {tripsLoading ? (
+          <p>Loading your trips...</p>
+        ) : tripsError ? (
+          <p>{tripsError}</p>
+        ) : myTrips.length === 0 ? (
+          <p>You haven't booked any stays yet. Your next adventure awaits!</p>
+        ) : (
+          <div className="my-trips-grid">
+            {myTrips.map((booking) => (
+              <article className="trip-card" key={booking._id}>
+                <div className="trip-image">
+                  <img
+                    src={
+                      booking.property?.image ||
+                      'https://placehold.co/600x400?text=Aurelia+Stay'
+                    }
+                    alt={booking.property?.title || 'Booked stay'}
+                  />
+                </div>
+
+                <div className="trip-details">
+                  <div className="trip-title-row">
+                    <h3>{booking.property?.title || 'Property'}</h3>
+
+                    <span className={`trip-status ${booking.status}`}>
+                      {booking.status}
+                    </span>
+                  </div>
+
+                  <p className="trip-location">
+                    {booking.property?.location || 'Location unavailable'}
+                  </p>
+
+                  <div className="trip-info">
+                    <div>
+                      <span>CHECK-IN</span>
+                      <strong>
+                        {new Date(booking.checkIn).toLocaleDateString('en-IN')}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>CHECK-OUT</span>
+                      <strong>
+                        {new Date(booking.checkOut).toLocaleDateString('en-IN')}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>GUESTS</span>
+                      <strong>{booking.guests}</strong>
+                    </div>
+                  </div>
+
+                  <div className="trip-footer">
+                    <div>
+                      <span>Total price</span>
+                      <strong>
+                        ₹{Number(booking.totalPrice).toLocaleString('en-IN')}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+
             {/* Booking Modal */}
       {selectedStay && (
         <div className="booking-overlay">
@@ -433,7 +546,7 @@ async function handleCreateBooking(event) {
               >
                 {bookingLoading ? 'Confirming...' : 'Confirm Booking'}
               </button>
-              
+
               {bookingMessage && (
                 <p style={{ color: 'green', marginTop: '12px' }}>
                   {bookingMessage}

@@ -297,6 +297,28 @@ app.post("/api/properties", async (req, res) => {
   }
 });
 
+// Get all bookings for My Trips
+app.get("/api/bookings", async (req, res) => {
+  try {
+    const bookings = await Booking.find()
+      .populate("property")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: bookings.length,
+      data: bookings,
+    });
+  } catch (error) {
+    console.error("Error fetching bookings:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch bookings",
+    });
+  }
+});
+
 
 // Connect to MongoDB and start server
 async function startServer() {
