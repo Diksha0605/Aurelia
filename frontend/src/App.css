@@ -819,3 +819,233 @@ button {
 .section-heading h2 {
   color: #244c3c;
 }
+
+
+/* ==============================
+   AURELIA AI FEATURES
+================================ */
+
+.ai-section {
+  padding: 90px 8%;
+  background: #f8f7f4;
+}
+
+.ai-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 40px;
+  align-items: start;
+}
+
+.ai-card {
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 18px;
+  border: 1px solid #e9e5df;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.ai-label {
+  display: inline-block;
+  color: #9a7650;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  margin-bottom: 14px;
+}
+
+.ai-card h3 {
+  font-size: 25px;
+  color: #25251f;
+  margin-bottom: 10px;
+}
+
+.ai-card > p {
+  color: #77736d;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.ai-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ai-card label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #45423d;
+  margin-top: 5px;
+}
+
+.ai-card input,
+.ai-card select {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #dedbd5;
+  border-radius: 9px;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  outline: none;
+}
+
+.ai-card input:focus,
+.ai-card select:focus {
+  border-color: #a48661;
+  box-shadow: 0 0 0 3px rgba(164, 134, 97, 0.12);
+}
+
+.ai-input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.ai-input-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ai-submit-btn {
+  width: 100%;
+  padding: 15px;
+  margin-top: 12px;
+  background: #292a24;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.ai-submit-btn:hover:not(:disabled) {
+  background: #9a7650;
+  transform: translateY(-2px);
+}
+
+.ai-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ai-result {
+  margin-top: 24px;
+  padding: 22px;
+  background: #f4f0e9;
+  border-radius: 12px;
+  border-left: 4px solid #a48661;
+}
+
+.ai-result > span {
+  color: #77736d;
+  font-size: 13px;
+}
+
+.ai-result h3 {
+  color: #292a24;
+  font-size: 30px;
+  margin: 8px 0;
+}
+
+.ai-result p {
+  color: #77736d;
+  font-size: 12px;
+}
+
+.ai-error {
+  color: #c0392b;
+  font-size: 13px;
+  margin-top: 15px;
+}
+
+.ai-helper-text {
+  font-size: 13px;
+  color: #999;
+  margin-top: 20px;
+}
+
+.ai-result-list {
+  margin-top: 25px;
+}
+
+.ai-result-list h4 {
+  margin-bottom: 15px;
+  color: #292a24;
+}
+
+.ai-recommendation {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 17px 0;
+  border-bottom: 1px solid #eeeae4;
+}
+
+.ai-recommendation:last-child {
+  border-bottom: none;
+}
+
+.ai-recommendation > div:first-child {
+  min-width: 0;
+}
+
+.ai-recommendation strong {
+  color: #292a24;
+  font-size: 14px;
+}
+
+.ai-recommendation p {
+  color: #77736d;
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+.ai-recommendation span {
+  display: block;
+  color: #9a7650;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.ai-recommendation-price {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ai-recommendation-price strong {
+  font-size: 15px;
+}
+
+@media (max-width: 850px) {
+  .ai-features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-section {
+    padding: 65px 5%;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-card {
+    padding: 22px;
+  }
+
+  .ai-input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-recommendation {
+    flex-direction: column;
+  }
+
+  .ai-recommendation-price {
+    text-align: left;
+  }
+}

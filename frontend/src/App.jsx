@@ -16,6 +16,108 @@ function App() {
   const [tripsLoading, setTripsLoading] = useState(false)
   const [tripsError, setTripsError] = useState('')
 
+    // AI Price Prediction states
+  const [predictionForm, setPredictionForm] = useState({
+    location: 'Manali, Himachal Pradesh',
+    property_type: 'Villa',
+    guests: 4,
+    bedrooms: 2,
+    rating: 4.8,
+  })
+
+  const [predictedPrice, setPredictedPrice] = useState(null)
+  const [predictionLoading, setPredictionLoading] = useState(false)
+  const [predictionError, setPredictionError] = useState('')
+
+  // Smart Budget Optimizer states
+  const [budgetForm, setBudgetForm] = useState({
+    destination: 'Manali',
+    total_budget: 20000,
+    nights: 4,
+    guests: 4,
+  })
+
+  const [recommendations, setRecommendations] = useState([])
+  const [budgetLoading, setBudgetLoading] = useState(false)
+  const [budgetError, setBudgetError] = useState('')
+
+    // Call the AI Price Prediction API
+  async function handlePredictPrice(event) {
+    event.preventDefault()
+
+    try {
+      setPredictionLoading(true)
+      setPredictionError('')
+      setPredictedPrice(null)
+
+      const response = await fetch('http://127.0.0.1:8000/predict-price', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...predictionForm,
+          guests: Number(predictionForm.guests),
+          bedrooms: Number(predictionForm.bedrooms),
+          rating: Number(predictionForm.rating),
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.detail || 'Price prediction failed')
+      }
+
+      setPredictedPrice(result.predicted_price_per_night)
+
+    } catch (err) {
+      console.error('Price prediction error:', err)
+      setPredictionError(err.message || 'Unable to predict price.')
+    } finally {
+      setPredictionLoading(false)
+    }
+  }
+
+
+  // Call the Smart Budget Optimizer API
+  async function handleOptimizeBudget(event) {
+    event.preventDefault()
+
+    try {
+      setBudgetLoading(true)
+      setBudgetError('')
+      setRecommendations([])
+
+      const response = await fetch('http://127.0.0.1:8000/optimize-budget', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...budgetForm,
+          total_budget: Number(budgetForm.total_budget),
+          nights: Number(budgetForm.nights),
+          guests: Number(budgetForm.guests),
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.detail || 'Budget optimization failed')
+      }
+
+      setRecommendations(result.recommendations || [])
+
+    } catch (err) {
+      console.error('Budget optimization error:', err)
+      setBudgetError(err.message || 'Unable to optimize your budget.')
+    } finally {
+      setBudgetLoading(false)
+    }
+  }
+
   // Booking states
   const [selectedStay, setSelectedStay] = useState(null)
   const [bookingForm, setBookingForm] = useState({
@@ -565,21 +667,254 @@ useEffect(() => {
 
 
       {/* Budget Banner */}
-      <section className="budget-banner" id="budget">
-        <span className="budget-symbol">₹</span>
-
-        <div>
-          <span className="eyebrow">TRAVEL SMARTER</span>
-          <h2>Beautiful stays. Better budgets.</h2>
-          <p>
-            We are working on smarter ways to help you discover
-            stays that fit your travel budget.
-          </p>
+            {/* AI Features Section */}
+      <section className="ai-section" id="budget">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">POWERED BY ARTIFICIAL INTELLIGENCE</span>
+            <h2>Travel smarter with Aurelia AI.</h2>
+          </div>
+          <p>Make better travel decisions with intelligent recommendations.</p>
         </div>
 
-        <a href="#stays" className="budget-link">
-          Explore stays ↗
-        </a>
+        <div className="ai-features-grid">
+
+          {/* AI Price Predictor */}
+          <div className="ai-card">
+            <span className="ai-label">✦ MACHINE LEARNING</span>
+            <h3>AI Price Predictor</h3>
+            <p>Estimate the nightly price of an accommodation using our trained Random Forest model.</p>
+
+            <form onSubmit={handlePredictPrice}>
+              <label>Destination</label>
+              <select
+                value={predictionForm.location}
+                onChange={(event) =>
+                  setPredictionForm({
+                    ...predictionForm,
+                    location: event.target.value,
+                  })
+                }
+              >
+                {[
+                  'Manali, Himachal Pradesh',
+                  'North Goa, Goa',
+                  'Lonavala, Maharashtra',
+                  'Munnar, Kerala',
+                  'Jaipur, Rajasthan',
+                  'Shimla, Himachal Pradesh',
+                  'Rishikesh, Uttarakhand',
+                  'Udaipur, Rajasthan',
+                ].map((place) => (
+                  <option key={place} value={place}>{place}</option>
+                ))}
+              </select>
+
+              <label>Property Type</label>
+              <select
+                value={predictionForm.property_type}
+                onChange={(event) =>
+                  setPredictionForm({
+                    ...predictionForm,
+                    property_type: event.target.value,
+                  })
+                }
+              >
+                {['Villa', 'Cottage', 'Apartment', 'Homestay', 'Retreat', 'Hotel', 'Suite', 'Chalet', 'Lodge', 'Haveli', 'Residence', 'Other'].map((type) => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+              </select>
+
+              <div className="ai-input-row">
+                <div>
+                  <label>Guests</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={predictionForm.guests}
+                    onChange={(event) =>
+                      setPredictionForm({
+                        ...predictionForm,
+                        guests: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label>Bedrooms</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={predictionForm.bedrooms}
+                    onChange={(event) =>
+                      setPredictionForm({
+                        ...predictionForm,
+                        bedrooms: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+              </div>
+
+              <label>Property Rating (0–5)</label>
+              <input
+                type="number"
+                min="0"
+                max="5"
+                step="0.1"
+                value={predictionForm.rating}
+                onChange={(event) =>
+                  setPredictionForm({
+                    ...predictionForm,
+                    rating: event.target.value,
+                  })
+                }
+                required
+              />
+
+              <button
+                type="submit"
+                className="ai-submit-btn"
+                disabled={predictionLoading}
+              >
+                {predictionLoading ? 'Predicting...' : '✦ Predict Price'}
+              </button>
+            </form>
+
+            {predictedPrice !== null && (
+              <div className="ai-result">
+                <span>Estimated Price Per Night</span>
+                <h3>₹{Number(predictedPrice).toLocaleString('en-IN')}</h3>
+                <p>Predicted by Aurelia's Random Forest model.</p>
+              </div>
+            )}
+
+            {predictionError && (
+              <p className="ai-error">{predictionError}</p>
+            )}
+          </div>
+
+
+          {/* Smart Budget Optimizer */}
+          <div className="ai-card">
+            <span className="ai-label">✦ SMART RECOMMENDATIONS</span>
+            <h3>Budget Optimizer</h3>
+            <p>Discover highly rated stays that fit your total travel budget.</p>
+
+            <form onSubmit={handleOptimizeBudget}>
+              <label>Destination</label>
+              <select
+                value={budgetForm.destination}
+                onChange={(event) =>
+                  setBudgetForm({
+                    ...budgetForm,
+                    destination: event.target.value,
+                  })
+                }
+              >
+                {['Manali', 'North Goa', 'Lonavala', 'Munnar', 'Jaipur', 'Shimla', 'Rishikesh', 'Udaipur'].map((place) => (
+                  <option key={place} value={place}>{place}</option>
+                ))}
+              </select>
+
+              <label>Total Budget (₹)</label>
+              <input
+                type="number"
+                min="1"
+                value={budgetForm.total_budget}
+                onChange={(event) =>
+                  setBudgetForm({
+                    ...budgetForm,
+                    total_budget: event.target.value,
+                  })
+                }
+                required
+              />
+
+              <div className="ai-input-row">
+                <div>
+                  <label>Number of Nights</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={budgetForm.nights}
+                    onChange={(event) =>
+                      setBudgetForm({
+                        ...budgetForm,
+                        nights: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label>Guests</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={budgetForm.guests}
+                    onChange={(event) =>
+                      setBudgetForm({
+                        ...budgetForm,
+                        guests: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="ai-submit-btn"
+                disabled={budgetLoading}
+              >
+                {budgetLoading ? 'Finding stays...' : '✦ Find Best Stays'}
+              </button>
+            </form>
+
+            {budgetError && (
+              <p className="ai-error">{budgetError}</p>
+            )}
+
+            {recommendations.length > 0 && (
+              <div className="ai-result-list">
+                <h4>{recommendations.length} Recommended Stays</h4>
+
+                {recommendations.map((stay) => (
+                  <div className="ai-recommendation" key={stay.property_id}>
+                    <div>
+                      <strong>{stay.title}</strong>
+                      <p>{stay.location}</p>
+                      <span>★ {stay.rating} Rating</span>
+                    </div>
+
+                    <div className="ai-recommendation-price">
+                      <strong>
+                        ₹{Number(stay.total_cost).toLocaleString('en-IN')}
+                      </strong>
+                      <span>{budgetForm.nights} nights</span>
+                      <span>
+                        ₹{Number(stay.remaining_budget).toLocaleString('en-IN')} left
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {recommendations.length === 0 && !budgetLoading && !budgetError && (
+              <p className="ai-helper-text">
+                Your recommended stays will appear here.
+              </p>
+            )}
+          </div>
+
+        </div>
       </section>
 
       {/* Footer */}

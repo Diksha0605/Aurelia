@@ -1,0 +1,371 @@
+[
+  {
+    "_id": "6ae772e4b4847708296b87cd",
+    "title": "Cozy Mountain Villa",
+    "location": "Manali, Himachal Pradesh",
+    "pricePerNight": 3500,
+    "rating": 4.8,
+    "guests": 4,
+    "bedrooms": 2
+  },
+  {
+    "_id": "6af4455b40712f0eb774e341",
+    "title": "Pinewood Mountain Retreat",
+    "location": "Manali, Himachal Pradesh",
+    "bedrooms": 3,
+    "guests": 6,
+    "pricePerNight": 4500,
+    "rating": 4.9
+  },
+  {
+    "_id": "6af4455b40712f0eb774e342",
+    "location": "Manali, Himachal Pradesh",
+    "title": "Snowline Cottage",
+    "bedrooms": 2,
+    "guests": 4,
+    "pricePerNight": 3200,
+    "rating": 4.7
+  },
+  {
+    "_id": "6af4455b40712f0eb774e343",
+    "location": "Manali, Himachal Pradesh",
+    "title": "The Himalayan Nest",
+    "bedrooms": 1,
+    "guests": 3,
+    "pricePerNight": 2800,
+    "rating": 4.5
+  },
+  {
+    "_id": "6af4455b40712f0eb774e344",
+    "location": "Manali, Himachal Pradesh",
+    "title": "Cedar Valley Villa",
+    "bedrooms": 4,
+    "guests": 8,
+    "pricePerNight": 5200,
+    "rating": 4.8
+  },
+  {
+    "_id": "6af4455b40712f0eb774e345",
+    "location": "Manali, Himachal Pradesh",
+    "title": "Apple Orchard Homestay",
+    "bedrooms": 1,
+    "guests": 2,
+    "pricePerNight": 2100,
+    "rating": 4.4
+  },
+  {
+    "_id": "6af4455b40712f0eb774e346",
+    "location": "North Goa, Goa",
+    "title": "Palm Grove Beach Villa",
+    "bedrooms": 3,
+    "guests": 6,
+    "pricePerNight": 5500,
+    "rating": 4.9
+  },
+  {
+    "_id": "6af4455b40712f0eb774e347",
+    "location": "North Goa, Goa",
+    "title": "Casa de Sol",
+    "bedrooms": 2,
+    "guests": 4,
+    "pricePerNight": 3800,
+    "rating": 4.7
+  },
+  {
+    "_id": "6af4455b40712f0eb774e348",
+    "location": "North Goa, Goa",
+    "title": "Seabreeze Apartment",
+    "bedrooms": 1,
+    "guests": 3,
+    "pricePerNight": 2900,
+    "rating": 4.5
+  },
+  {
+    "_id": "6af4455b40712f0eb774e349",
+    "location": "North Goa, Goa",
+    "title": "The Coastal Hideaway",
+    "bedrooms": 2,
+    "guests": 5,
+    "pricePerNight": 4600,
+    "rating": 4.8
+  },
+  {
+    "_id": "6af4455b40712f0eb774e34a",
+    "location": "North Goa, Goa",
+    "title": "Serene Sands Homestay",
+    "bedrooms": 1,
+    "guests": 2,
+    "pricePerNight": 2200,
+    "rating": 4.3
+  },
+  {
+    "_id": "6af4455b40712f0eb774e34b",
+    "location": "Lonavala, Maharashtra",
+    "title": "Whispering Woods Villa",
+    "bedrooms": 4,
+    "guests": 8,
+    "pricePerNight": 4800,
+    "rating": 4.9
+  },
+  {
+    "_id": "6af4455b40712f0eb774e34c",
+    "location": "Lonavala, Maharashtra",
+    "title": "Misty Hills Cottage",
+    "bedrooms": 2,
+    "guests": 4,
+    "pricePerNight": 3100,
+    "rating": 4.6
+  },
+  {
+    "_id": "6af4455b40712f0eb774e34d",
+    "location": "Lonavala, Maharashtra",
+    "title": "Valley View Residence",
+    "bedrooms": 2,
+    "guests": 5,
+    "pricePerNight": 3600,
+    "rating": 4.7
+  },
+  {
+    "_id": "6af4455b40712f0eb774e34e",
+    "location": "Lonavala, Maharashtra",
+    "title": "The Fern Retreat",
+    "bedrooms": 3,
+    "guests": 6,
+    "pricePerNight": 4200,
+    "rating": 4.8
+  },
+  {
+    "_id": "6af4455b40712f0eb774e34f",
+    "location": "Lonavala, Maharashtra",
+    "title": "Hilltop Budget Stay",
+    "bedrooms": 1,
+    "guests": 2,
+    "pricePerNight": 1900,
+    "rating": 4.2
+  },
+  {
+    "_id": "6af4455b40712f0eb774e350",
+    "location": "Munnar, Kerala",
+    "title": "Tea Garden Escape",
+    "bedrooms": 2,
+    "guests": 5,
+    "pricePerNight": 4200,
+    "rating": 4.9
+  },
+  {
+    "_id": "6af4455b40712f0eb774e351",
+    "location": "Munnar, Kerala",
+    "title": "Misty Morning Cottage",
+    "bedrooms": 2,
+    "guests": 4,
+    "pricePerNight": 3000,
+    "rating": 4.7
+  },
+  {
+    "_id": "6af4455b40712f0eb774e352",
+    "location": "Munnar, Kerala",
+    "title": "Green Valley Retreat",
+    "bedrooms": 2,
+    "guests": 5,
+    "pricePerNight": 3500,
+    "rating": 4.8
+  },
+  {
+    "_id": "6af4455b40712f0eb774e353",
+    "location": "Munnar, Kerala",
+    "title": "Cloud Nine Villa",
+    "bedrooms": 3,
+    "guests": 7,
+    "pricePerNight": 5000,
+    "rating": 4.9
+  },
+  {
+    "_id": "6af4455b40712f0eb774e354",
+    "location": "Munnar, Kerala",
+    "title": "Cardamom Hills Homestay",
+    "bedrooms": 1,
+    "guests": 2,
+    "pricePerNight": 2000,
+    "rating": 4.4
+  },
+  {
+    "_id": "6af4455b40712f0eb774e355",
+    "location": "Jaipur, Rajasthan",
+    "title": "Royal Courtyard Haveli",
+    "bedrooms": 3,
+    "guests": 6,
+    "pricePerNight": 5200,
+    "rating": 4.9
+  },
+  {
+    "_id": "6af4455b40712f0eb774e356",
+    "location": "Jaipur, Rajasthan",
+    "title": "Pink City Heritage Stay",
+    "bedrooms": 2,
+    "guests": 4,
+    "pricePerNight": 3400,
+    "rating": 4.7
+  },
+  {
+    "_id": "6af4455b40712f0eb774e357",
+    "location": "Jaipur, Rajasthan",
+    "title": "Amber Palace View Suite",
+    "bedrooms": 2,
+    "guests": 3,
+    "pricePerNight": 3900,
+    "rating": 4.8
+  },
+  {
+    "_id": "6af4455b40712f0eb774e358",
+    "location": "Jaipur, Rajasthan",
+    "title": "Rajputana Luxury Villa",
+    "bedrooms": 4,
+    "guests": 8,
+    "pricePerNight": 6000,
+    "rating": 4.9
+  },
+  {
+    "_id": "6af4455b40712f0eb774e359",
+    "location": "Jaipur, Rajasthan",
+    "title": "Old City Guest House",
+    "bedrooms": 1,
+    "guests": 2,
+    "pricePerNight": 1800,
+    "rating": 4.3
+  },
+  {
+    "_id": "6af4455b40712f0eb774e35a",
+    "location": "Shimla, Himachal Pradesh",
+    "title": "Pine Crest Chalet",
+    "bedrooms": 3,
+    "guests": 6,
+    "pricePerNight": 4300,
+    "rating": 4.8
+  },
+  {
+    "_id": "6af4455b40712f0eb774e35b",
+    "location": "Shimla, Himachal Pradesh",
+    "title": "The Ridge View Cottage",
+    "bedrooms": 2,
+    "guests": 4,
+    "pricePerNight": 3200,
+    "rating": 4.7
+  },
+  {
+    "_id": "6af4455b40712f0eb774e35c",
+    "location": "Shimla, Himachal Pradesh",
+    "title": "Oakwood Mountain Stay",
+    "bedrooms": 1,
+    "guests": 3,
+    "pricePerNight": 2800,
+    "rating": 4.5
+  },
+  {
+    "_id": "6af4455b40712f0eb774e35d",
+    "location": "Shimla, Himachal Pradesh",
+    "title": "Snowfall Luxury Lodge",
+    "bedrooms": 3,
+    "guests": 7,
+    "pricePerNight": 5500,
+    "rating": 4.9
+  },
+  {
+    "_id": "6af4455b40712f0eb774e35e",
+    "location": "Shimla, Himachal Pradesh",
+    "title": "Hillside Homestay",
+    "bedrooms": 1,
+    "guests": 2,
+    "pricePerNight": 2100,
+    "rating": 4.4
+  },
+  {
+    "_id": "6af4455b40712f0eb774e35f",
+    "location": "Rishikesh, Uttarakhand",
+    "title": "Ganges Riverside Retreat",
+    "bedrooms": 2,
+    "guests": 5,
+    "pricePerNight": 3900,
+    "rating": 4.9
+  },
+  {
+    "_id": "6af4455b40712f0eb774e360",
+    "location": "Rishikesh, Uttarakhand",
+    "title": "The Riverstone Villa",
+    "bedrooms": 3,
+    "guests": 6,
+    "pricePerNight": 4500,
+    "rating": 4.8
+  },
+  {
+    "_id": "6af4455b40712f0eb774e361",
+    "location": "Rishikesh, Uttarakhand",
+    "title": "Forest Edge Cottage",
+    "bedrooms": 2,
+    "guests": 4,
+    "pricePerNight": 2700,
+    "rating": 4.6
+  },
+  {
+    "_id": "6af4455b40712f0eb774e362",
+    "location": "Rishikesh, Uttarakhand",
+    "title": "Mountain Breeze Residence",
+    "bedrooms": 2,
+    "guests": 5,
+    "pricePerNight": 3500,
+    "rating": 4.7
+  },
+  {
+    "_id": "6af4455b40712f0eb774e363",
+    "location": "Rishikesh, Uttarakhand",
+    "title": "Little Buddha Homestay",
+    "bedrooms": 1,
+    "guests": 2,
+    "pricePerNight": 1700,
+    "rating": 4.3
+  },
+  {
+    "_id": "6af4455b40712f0eb774e364",
+    "location": "Udaipur, Rajasthan",
+    "title": "Lake Palace View Villa",
+    "bedrooms": 4,
+    "guests": 8,
+    "pricePerNight": 6500,
+    "rating": 4.9
+  },
+  {
+    "_id": "6af4455b40712f0eb774e365",
+    "location": "Udaipur, Rajasthan",
+    "title": "The Aravalli Retreat",
+    "bedrooms": 3,
+    "guests": 6,
+    "pricePerNight": 4200,
+    "rating": 4.8
+  },
+  {
+    "_id": "6af4455b40712f0eb774e366",
+    "location": "Udaipur, Rajasthan",
+    "title": "Marigold Heritage Home",
+    "bedrooms": 2,
+    "guests": 4,
+    "pricePerNight": 3300,
+    "rating": 4.7
+  },
+  {
+    "_id": "6af4455b40712f0eb774e367",
+    "location": "Udaipur, Rajasthan",
+    "title": "Lakeside Luxury Suite",
+    "bedrooms": 2,
+    "guests": 5,
+    "pricePerNight": 5000,
+    "rating": 4.9
+  },
+  {
+    "_id": "6af4455b40712f0eb774e368",
+    "location": "Udaipur, Rajasthan",
+    "title": "Shanti Guesthouse",
+    "bedrooms": 1,
+    "guests": 2,
+    "pricePerNight": 1900,
+    "rating": 4.4
+  }
+]

@@ -1,0 +1,12 @@
+# Node.js
+node_modules/
+dist/
+*.local
+
+# Python
+ml/venv/
+ml/__pycache__/
+ml/*.pyc
+
+# Secrets
+backend/.env
