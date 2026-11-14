@@ -41,6 +41,20 @@ function App() {
   const [budgetLoading, setBudgetLoading] = useState(false)
   const [budgetError, setBudgetError] = useState('')
 
+  // Personalized Stay Recommendations states
+const [personalizedForm, setPersonalizedForm] = useState({
+  destination: 'Manali',
+  total_budget: 20000,
+  nights: 4,
+  guests: 4,
+  min_rating: 4.5,
+  preferred_bedrooms: 2,
+})
+
+const [personalizedRecommendations, setPersonalizedRecommendations] = useState([])
+const [personalizedLoading, setPersonalizedLoading] = useState(false)
+const [personalizedError, setPersonalizedError] = useState('')
+
     // Call the AI Price Prediction API
   async function handlePredictPrice(event) {
     event.preventDefault()
@@ -78,6 +92,48 @@ function App() {
       setPredictionLoading(false)
     }
   }
+
+  async function handlePersonalizedRecommendations(event) {
+  event.preventDefault()
+
+  try {
+    setPersonalizedLoading(true)
+    setPersonalizedError('')
+    setPersonalizedRecommendations([])
+
+    const response = await fetch(
+      'http://127.0.0.1:8000/personalized-recommendations',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...personalizedForm,
+          total_budget: Number(personalizedForm.total_budget),
+          nights: Number(personalizedForm.nights),
+          guests: Number(personalizedForm.guests),
+          min_rating: Number(personalizedForm.min_rating),
+          preferred_bedrooms: Number(personalizedForm.preferred_bedrooms),
+        }),
+      }
+    )
+
+    const result = await response.json()
+
+    if (!response.ok) {
+      throw new Error(result.detail || 'Unable to get recommendations.')
+    }
+
+    setPersonalizedRecommendations(result.recommendations || [])
+
+  } catch (err) {
+    console.error('Recommendation error:', err)
+    setPersonalizedError(err.message || 'Unable to get recommendations.')
+  } finally {
+    setPersonalizedLoading(false)
+  }
+}
 
 
   // Call the Smart Budget Optimizer API
@@ -667,7 +723,10 @@ useEffect(() => {
 
 
       {/* Budget Banner */}
-            {/* AI Features Section */}
+      {/* AI Features Section */}
+
+
+      {/* AI Features Section */}
       <section className="ai-section" id="budget">
         <div className="section-heading">
           <div>
@@ -679,7 +738,7 @@ useEffect(() => {
 
         <div className="ai-features-grid">
 
-          {/* AI Price Predictor */}
+          {/* 1. AI Price Predictor */}
           <div className="ai-card">
             <span className="ai-label">✦ MACHINE LEARNING</span>
             <h3>AI Price Predictor</h3>
@@ -720,7 +779,11 @@ useEffect(() => {
                   })
                 }
               >
-                {['Villa', 'Cottage', 'Apartment', 'Homestay', 'Retreat', 'Hotel', 'Suite', 'Chalet', 'Lodge', 'Haveli', 'Residence', 'Other'].map((type) => (
+                {[
+                  'Villa', 'Cottage', 'Apartment', 'Homestay',
+                  'Retreat', 'Hotel', 'Suite', 'Chalet',
+                  'Lodge', 'Haveli', 'Residence', 'Other'
+                ].map((type) => (
                   <option key={type} value={type}>{type}</option>
                 ))}
               </select>
@@ -798,7 +861,7 @@ useEffect(() => {
           </div>
 
 
-          {/* Smart Budget Optimizer */}
+          {/* 2. Smart Budget Optimizer */}
           <div className="ai-card">
             <span className="ai-label">✦ SMART RECOMMENDATIONS</span>
             <h3>Budget Optimizer</h3>
@@ -815,7 +878,10 @@ useEffect(() => {
                   })
                 }
               >
-                {['Manali', 'North Goa', 'Lonavala', 'Munnar', 'Jaipur', 'Shimla', 'Rishikesh', 'Udaipur'].map((place) => (
+                {[
+                  'Manali', 'North Goa', 'Lonavala', 'Munnar',
+                  'Jaipur', 'Shimla', 'Rishikesh', 'Udaipur'
+                ].map((place) => (
                   <option key={place} value={place}>{place}</option>
                 ))}
               </select>
@@ -907,15 +973,188 @@ useEffect(() => {
               </div>
             )}
 
-            {recommendations.length === 0 && !budgetLoading && !budgetError && (
-              <p className="ai-helper-text">
-                Your recommended stays will appear here.
-              </p>
+            {recommendations.length === 0 &&
+              !budgetLoading &&
+              !budgetError && (
+                <p className="ai-helper-text">
+                  Your recommended stays will appear here.
+                </p>
+              )}
+          </div>
+
+
+          {/* 3. Personalized Stay Recommendations */}
+          <div className="ai-card">
+            <span className="ai-label">✦ PERSONALIZED AI</span>
+            <h3>Personalized Stay Recommendations</h3>
+            <p>Find stays matched to your budget, guest requirements, preferred rating, and bedroom needs.</p>
+
+            <form onSubmit={handlePersonalizedRecommendations}>
+              <label>Destination</label>
+              <select
+                value={personalizedForm.destination}
+                onChange={(event) =>
+                  setPersonalizedForm({
+                    ...personalizedForm,
+                    destination: event.target.value,
+                  })
+                }
+              >
+                {[
+                  'Manali', 'North Goa', 'Lonavala', 'Munnar',
+                  'Jaipur', 'Shimla', 'Rishikesh', 'Udaipur'
+                ].map((place) => (
+                  <option key={place} value={place}>{place}</option>
+                ))}
+              </select>
+
+              <label>Total Budget (₹)</label>
+              <input
+                type="number"
+                min="1"
+                value={personalizedForm.total_budget}
+                onChange={(event) =>
+                  setPersonalizedForm({
+                    ...personalizedForm,
+                    total_budget: event.target.value,
+                  })
+                }
+                required
+              />
+
+              <div className="ai-input-row">
+                <div>
+                  <label>Number of Nights</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={personalizedForm.nights}
+                    onChange={(event) =>
+                      setPersonalizedForm({
+                        ...personalizedForm,
+                        nights: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label>Guests</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={personalizedForm.guests}
+                    onChange={(event) =>
+                      setPersonalizedForm({
+                        ...personalizedForm,
+                        guests: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="ai-input-row">
+                <div>
+                  <label>Minimum Rating</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="5"
+                    step="0.1"
+                    value={personalizedForm.min_rating}
+                    onChange={(event) =>
+                      setPersonalizedForm({
+                        ...personalizedForm,
+                        min_rating: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label>Preferred Bedrooms</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={personalizedForm.preferred_bedrooms}
+                    onChange={(event) =>
+                      setPersonalizedForm({
+                        ...personalizedForm,
+                        preferred_bedrooms: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="ai-submit-btn"
+                disabled={personalizedLoading}
+              >
+                {personalizedLoading
+                  ? 'Finding matches...'
+                  : '✦ Get Personalized Stays'}
+              </button>
+            </form>
+
+            {personalizedError && (
+              <p className="ai-error">{personalizedError}</p>
             )}
+
+            {personalizedRecommendations.length > 0 && (
+              <div className="ai-result-list">
+                <h4>
+                  {personalizedRecommendations.length} Personalized Matches
+                </h4>
+
+                {personalizedRecommendations.map((stay) => (
+                  <div className="ai-recommendation" key={stay.property_id}>
+                    <div>
+                      <strong>{stay.title}</strong>
+                      <p>{stay.location}</p>
+                      <span>★ {stay.rating} Rating</span>
+                      <p>
+                        {stay.bedrooms} Bedrooms · Up to {stay.guests} Guests
+                      </p>
+                      <span>
+                        Match Score: {stay.recommendation_score}/100
+                      </span>
+                    </div>
+
+                    <div className="ai-recommendation-price">
+                      <strong>
+                        ₹{Number(stay.total_cost).toLocaleString('en-IN')}
+                      </strong>
+                      <span>{personalizedForm.nights} nights</span>
+                      <span>
+                        ₹{Number(stay.remaining_budget).toLocaleString('en-IN')} left
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {personalizedRecommendations.length === 0 &&
+              !personalizedLoading &&
+              !personalizedError && (
+                <p className="ai-helper-text">
+                  Your personalized stay matches will appear here.
+                </p>
+              )}
           </div>
 
         </div>
       </section>
+
+    
+
 
       {/* Footer */}
       <footer className="footer">

@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field
 import pandas as pd
 import joblib
 import json
+from recommendation_engine import recommend_stays
 import os
 
 app = FastAPI(title="Aurelia AI API")
@@ -48,6 +49,13 @@ class BudgetRequest(BaseModel):
     nights: int = Field(gt=0)
     guests: int = Field(gt=0)
 
+class RecommendationRequest(BaseModel):
+    destination: str
+    total_budget: float = Field(gt=0)
+    nights: int = Field(gt=0)
+    guests: int = Field(gt=0)
+    min_rating: float = Field(ge=0, le=5)
+    preferred_bedrooms: int = Field(gt=0)
 
 @app.get("/health")
 def health_check():
@@ -116,3 +124,24 @@ def optimize_budget(request: BudgetRequest):
         "count": len(matching_properties),
         "recommendations": matching_properties
     }
+
+@app.post("/personalized-recommendations")
+def personalized_recommendations(request: RecommendationRequest):
+    try:
+        results = recommend_stays(
+            destination=request.destination,
+            total_budget=request.total_budget,
+            nights=request.nights,
+            guests=request.guests,
+            min_rating=request.min_rating,
+            preferred_bedrooms=request.preferred_bedrooms
+        )
+
+        return {
+            "success": True,
+            "count": len(results),
+            "recommendations": results
+        }
+
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
