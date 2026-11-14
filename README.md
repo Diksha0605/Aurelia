@@ -39,33 +39,33 @@ The project combines a React frontend, an Express and MongoDB backend, and a Pyt
 ## Technology Stack
 
 ### Frontend	
--React 
--Vite
--JavaScript
--CSS
+- React 
+- Vite
+- JavaScript
+- CSS
 
 ### Backend	
--Node.js
--Express.js
+- Node.js
+- Express.js
 
 ### Database	
--MongoDB
--Mongoose
+- MongoDB
+- Mongoose
 
 ### AI/ML service	
--Python
--FastAPI
--scikit-learn
--pandas
--NumPy
+- Python
+- FastAPI
+- scikit-learn
+- pandas
+- NumPy
 
 ### Machine learning model	
--Random Forest Regressor
+- Random Forest Regressor
 
 ### Development tools	
--VS Code
--Git
--GitHub
+- VS Code
+- Git
+- GitHub
 
 ## Project Structure
 
@@ -177,30 +177,37 @@ http://127.0.0.1:8000/health
 
 Run the backend, frontend, and AI/ML API in separate terminals when using the complete application.
 Main API Endpoints
-Express backend
+### Express backend
 - GET /api/health — backend health check
 - GET /api/properties — retrieve and filter properties
 - GET /api/bookings/availability — check booking availability
 - POST /api/bookings — create a booking
 - GET /api/bookings — retrieve bookings
-Python AI/ML API
+### Python AI/ML API
 - GET /health — AI service health check
 - POST /predict-price — predict nightly price
 - POST /optimize-budget — find stays within a budget
 - POST /personalized-recommendations — return personalized stay matches
-Environment and Security
+### Environment and Security
 - Keep database credentials and API secrets in local .env files.
 - Never commit .env, virtual environments, node_modules, or generated cache folders.
 - Use .gitignore to exclude local dependencies and secrets.
 - Configure environment variables on the deployment platform before deploying.
-Future Improvements
+### Future Improvements
 - User authentication and profile management
 - Online payment integration
 - Maps and location-based discovery
 - More extensive real-world accommodation data for model training
 - Model evaluation using real market-price data
 - Deployment of the frontend, backend, and AI service
-Author
-Diksha Sahu
-B.Tech — Computer Science and Engineering
-- GitHub: @Diksha0605
+
+
+##  Author
+
+**Diksha Sahu**
+
+- B.Tech Computer Science Engineering
+- DY Patil International University, Pune
+- GitHub: [Diksha0605](https://github.com/Diksha0605)
+- LinkedIn: [Diksha Sahu](https://www.linkedin.com/in/diksha-sahu-68a84035b/)
+
