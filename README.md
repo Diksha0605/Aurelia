@@ -39,33 +39,33 @@ The project combines a React frontend, an Express and MongoDB backend, and a Pyt
 ## Technology Stack
 
 ### Frontend	
-React 
-Vite
-JavaScript
-CSS
+-React 
+-Vite
+-JavaScript
+-CSS
 
 ### Backend	
-Node.js
-Express.js
+-Node.js
+-Express.js
 
 ### Database	
-MongoDB
-Mongoose
+-MongoDB
+-Mongoose
 
 ### AI/ML service	
-Python
-FastAPI
-scikit-learn
-pandas
-NumPy
+-Python
+-FastAPI
+-scikit-learn
+-pandas
+-NumPy
 
 ### Machine learning model	
-Random Forest Regressor
+-Random Forest Regressor
 
 ### Development tools	
-VS Code
-Git
-GitHub
+-VS Code
+-Git
+-GitHub
 
 ## Project Structure
 
