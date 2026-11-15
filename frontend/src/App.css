@@ -1049,3 +1049,192 @@ button {
     text-align: left;
   }
 }
+
+
+
+/* ==============================
+   AURELIA BOOKING MODAL
+============================== */
+
+.booking-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(20, 35, 27, 0.65);
+  backdrop-filter: blur(5px);
+  overflow-y: auto;
+}
+
+.booking-modal {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 38px;
+  border-radius: 20px;
+  background: #fbfaf7;
+  color: #243b32;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.25);
+  animation: bookingAppear 0.25s ease;
+}
+
+@keyframes bookingAppear {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.booking-close {
+  position: absolute;
+  top: 15px;
+  right: 17px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #edf0e7;
+  color: #244c3c;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.booking-close:hover {
+  background: #244c3c;
+  color: white;
+}
+
+.booking-modal h2 {
+  margin: 8px 0 22px;
+  color: #244c3c;
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.booking-property {
+  margin-bottom: 24px;
+  padding: 18px;
+  border: 1px solid #e5e6dc;
+  border-radius: 12px;
+  background: #f3f2ec;
+}
+
+.booking-property h3 {
+  margin: 0 0 7px;
+  color: #244c3c;
+  font-size: 17px;
+}
+
+.booking-property p {
+  margin: 0 0 12px;
+  color: #777f75;
+  font-size: 13px;
+}
+
+.booking-property strong {
+  color: #244c3c;
+  font-size: 19px;
+}
+
+.booking-property span {
+  color: #777f75;
+  font-size: 12px;
+}
+
+.booking-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.booking-modal form label {
+  margin-top: 8px;
+  color: #344b3e;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.booking-modal form input {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 14px;
+  border: 1px solid #dedbd5;
+  border-radius: 9px;
+  outline: none;
+  background: white;
+  color: #243b32;
+  font: inherit;
+  font-size: 14px;
+}
+
+.booking-modal form input:focus {
+  border-color: #9a7650;
+  box-shadow: 0 0 0 3px rgba(154, 118, 80, 0.12);
+}
+
+.booking-date-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 5px;
+}
+
+.booking-date-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.booking-submit {
+  width: 100%;
+  margin-top: 18px;
+  padding: 15px;
+  border: none;
+  border-radius: 9px;
+  background: #244c3c;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.booking-submit:hover:not(:disabled) {
+  background: #35664f;
+  transform: translateY(-2px);
+}
+
+.booking-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.booking-modal form p {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+
+@media (max-width: 550px) {
+  .booking-modal {
+    padding: 28px 20px;
+  }
+
+  .booking-modal h2 {
+    font-size: 27px;
+  }
+
+  .booking-date-row {
+    grid-template-columns: 1fr;
+  }
+}
